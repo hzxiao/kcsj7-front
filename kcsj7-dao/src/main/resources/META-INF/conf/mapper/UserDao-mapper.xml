@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcsj7.view.dao.mapper.UserDao">
+    <select id="verifyUser" parameterType="Map" resultType="Map">
+        SELECT
+            user_id AS userId,
+            author,
+            username
+        FROM
+            user_basic
+        WHERE username = #{username} AND pwd = #{pwd} AND user_status = 1;
+    </select>
+    <select id="updateUser" parameterType="Map" flushCache="true">
+        UPDATE user_basic SET
+            update_date = NOW()
+        <if test="pwd != null and pwd != ''">
+            ,pwd = #{pwd}
+        </if>
+        <if test="author != null">
+            ,author = #{author}
+        </if>
+        <if test="userStatus != null">
+            ,user_status = #{userStatus}
+        </if>
+        <if test="bisStatus != null">
+            ,bis_status = #{bisStatus}
+        </if>
+        <if test="email != null">
+            ,email = #{email}
+        </if>
+        <if test="role != null">
+            ,role = #{role}
+        </if>
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>kcsj7-view-front</artifactId>
+        <groupId>com.kcsj7.view.front</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kcsj7.view.web</groupId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+
+    <artifactId>kcsj7-view-front-web</artifactId>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kcsj7.view.service</groupId>
+            <artifactId>kcsj7-view-front-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
+    </dependencies>
+</project>
