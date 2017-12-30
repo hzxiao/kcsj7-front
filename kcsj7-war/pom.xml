@@ -22,7 +22,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>kcsj7</finalName>
+        <finalName>kcsj</finalName>
 
         <!--<plugins>-->
             <!--<plugin>-->
