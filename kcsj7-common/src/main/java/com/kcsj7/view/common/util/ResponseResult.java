@@ -14,6 +14,8 @@ public class ResponseResult<T> {
     public static final String LOGIN_FAIL_CODE = "0402";
     //      未登录
     public static final String LOGIN_REQUIRE_CODE = "0401";
+    //      找不到
+    public static final String NOT_FOUND_CODE = "0404";
 
     private String code = SUCCESS_CODE;
 
@@ -85,6 +87,10 @@ public class ResponseResult<T> {
 
     public static <T> ResponseResult<T> createLoginRequireResult(T data) {
         return new ResponseResult<T>(ResponseResult.AUTH_FAIL_CODE, "未登录", data);
+    }
+
+    public static <T> ResponseResult<T> createNotFoundResult(String msg, T data) {
+        return new ResponseResult<T>(ResponseResult.NOT_FOUND_CODE, msg, data);
     }
 
     public String toString(){

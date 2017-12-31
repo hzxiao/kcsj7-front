@@ -1,5 +1,6 @@
 package com.kcsj7.view.dao.mapper;
 
+
 import java.util.Map;
 
 /**
@@ -8,4 +9,7 @@ import java.util.Map;
 public interface UserDao {
     Map<String,Object> verifyUser(Map<String,Object> data);
     void updateUser(Map<String,Object> data);
+    void addUser(Map<String, Object> data);
+    Map<String,Object> selectUserByUsername(String username);
+    Map<String,Object> selectUserByUid(Integer userId);
 }

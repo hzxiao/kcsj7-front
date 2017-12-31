@@ -42,4 +42,60 @@ public class UserController  {
         }
     }
 
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult<Map<String, Object>> register(@RequestBody Map<String,Object> request){
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+
+            if (ObjectUtils.isEmpty(request.get("username"))){
+                return ResponseResult.createFailResult("用户名不能为空",null);
+            }
+            if (ObjectUtils.isEmpty(request.get("pwd"))){
+                return ResponseResult.createFailResult("密码不能为空",null);
+            }
+            userService.addUser(request);
+            return ResponseResult.createSuccessResult("注册成功", null);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return ResponseResult.createFailResult(e.getMessage(),null);
+        }
+    }
+
+    @RequestMapping(value = "/name/{username}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult<Map<String, Object>> getUserByAUsername(@PathVariable String username) {
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            Map<String,Object> data = userService.getUserByUsername(username);
+            if (ObjectUtils.isEmpty(data)) {
+                return ResponseResult.createNotFoundResult("用户不存在", null);
+            }
+            result.put("user", data);
+
+            return ResponseResult.createSuccessResult("success", result);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return ResponseResult.createFailResult(e.getMessage(),null);
+        }
+    }
+
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult<Map<String, Object>> getUserByAUserId(@PathVariable Integer userId) {
+        Map<String,Object> result = new HashMap<String,Object>();
+        System.out.println(userId);
+        try {
+            Map<String,Object> data = userService.getUserByUid(userId);
+            if (ObjectUtils.isEmpty(data)) {
+                return ResponseResult.createNotFoundResult("用户不存在", null);
+            }
+            result.put("user", data);
+
+            return ResponseResult.createSuccessResult("success", result);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return ResponseResult.createFailResult(e.getMessage(),null);
+        }
+    }
 }

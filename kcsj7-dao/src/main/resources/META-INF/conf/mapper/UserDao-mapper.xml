@@ -33,4 +33,38 @@
         </if>
         WHERE user_id = #{userId}
     </select>
+
+    <insert id="addUser" parameterType="Map" flushCache="true">
+        INSERT INTO user_basic (
+              username, author, pwd
+            <if test="role != null">
+                ,role
+            </if>
+            <if test="userStatus != null">
+                , user_status
+            </if>
+               ,email, create_date, update_date)
+        values(
+            #{username}, #{author}, #{pwd}
+            <if test="role != null">
+                ,#{role}
+            </if>
+            <if test="userStatus != null">
+                , #{userStatus}
+            </if>
+            ,#{email}, now(), now()
+        )
+    </insert>
+
+    <select id="selectUserByUsername" parameterType="String" resultType="Map">
+        SELECT B.user_id AS userId, username, author, email, role, user_status As userStatus, E.points,
+          E.signature, B.update_date As updateDate, B.create_date As createDate
+          FROM user_basic B LEFT JOIN user_extend E ON B.user_id = E.user_id WHERE username = #{username}
+    </select>
+
+    <select id="selectUserByUid" parameterType="Integer" resultType="Map">
+        SELECT B.user_id AS userId, username, author, email, role, user_status As userStatus, E.points,
+          E.signature, B.update_date As updateDate, B.create_date As createDate
+          FROM user_basic B LEFT JOIN user_extend E ON B.user_id = E.user_id WHERE B.user_id = #{userId}
+    </select>
 </mapper>

@@ -34,6 +34,20 @@ public class UserServiceImpl implements UserService {
         userDao.updateUser(updateParam);
         result.put("user",userDao.verifyUser(data));
         return result;
+    }
 
+    @Override
+    public void addUser(Map<String, Object> data) {
+        userDao.addUser(data);
+    }
+
+    @Override
+    public Map<String, Object> getUserByUsername(String username) {
+        return userDao.selectUserByUsername(username);
+    }
+
+    @Override
+    public Map<String, Object> getUserByUid(Integer userId) {
+        return userDao.selectUserByUid(userId);
     }
 }

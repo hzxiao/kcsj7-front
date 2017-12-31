@@ -7,4 +7,7 @@ import java.util.Map;
  */
 public interface UserService {
     Map<String,Object> verifyUser(Map<String,Object> data);
+    void addUser(Map<String,Object> data);
+    Map<String, Object> getUserByUsername(String username);
+    Map<String, Object> getUserByUid(Integer userId);
 }
