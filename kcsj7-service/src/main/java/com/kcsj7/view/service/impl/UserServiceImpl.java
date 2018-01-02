@@ -1,7 +1,7 @@
 package com.kcsj7.view.service.impl;
 
-import com.kcsj7.view.common.util.ResponseResult;
 import com.kcsj7.view.dao.mapper.UserDao;
+import com.kcsj7.view.filter.util.JwtUtil;
 import com.kcsj7.view.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     private static Logger log = Logger.getLogger(UserServiceImpl.class);
 
+
     @Resource
     private UserDao userDao;
     @Override
@@ -32,13 +33,25 @@ public class UserServiceImpl implements UserService {
         updateParam.put("bisStatus",user.get("bisStatus"));
         //改变用户状态
         userDao.updateUser(updateParam);
-        result.put("user",userDao.verifyUser(data));
+        //获取token
+        String token = JwtUtil.generToken(data.get("username").toString(),null,data.get("username").toString());
+        user.put("token",token);
+        result.put("user",user);
         return result;
     }
 
     @Override
-    public void addUser(Map<String, Object> data) {
+    public Map<String,Object> addUser(Map<String, Object> data) {
+        Map<String,Object> result = new HashMap<>();
         userDao.addUser(data);
+        Map<String,Object> user = getUserByUsername(data.get("username").toString());
+        if (user==null){
+           return null;
+        }
+        String token = JwtUtil.generToken(data.get("username").toString(),null,data.get("username").toString());
+        user.put("token",token);
+        result.put("user",user);
+        return result;
     }
 
     @Override

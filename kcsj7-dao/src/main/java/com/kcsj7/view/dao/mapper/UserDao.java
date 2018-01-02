@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public interface UserDao {
     Map<String,Object> verifyUser(Map<String,Object> data);
+    Map<String,Object> verifyUserByUsername(String username);
     void updateUser(Map<String,Object> data);
     void addUser(Map<String, Object> data);
     Map<String,Object> selectUserByUsername(String username);

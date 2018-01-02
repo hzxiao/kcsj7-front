@@ -1,6 +1,6 @@
 package com.kcsj7.view.common.filter;
 
-import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * Created by tying on 2017/12/30.
+ * 跨域filter
  */
 @Component
 public class KcsjCORSFilter implements Filter {

@@ -17,6 +17,7 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public void addArticle(Map<String, Object> data) {
+
         articleDao.addArticle(data);
     }
 

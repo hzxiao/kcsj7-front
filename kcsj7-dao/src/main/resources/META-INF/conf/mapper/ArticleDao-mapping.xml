@@ -5,28 +5,21 @@
         INSERT INTO article_basic (
         title, tag, content
         <if test="status != null">
-            ,status
+          ,status
         </if>
-        <if test="programaId != null">
-            ,programa_id
-        </if>
-        ,category, source
-        <if test="reateBy != null">
-            ,reate_by
-        </if>
+        ,programa_id
+        ,category
+        ,source
+        ,reate_by
         ,create_name, create_date, update_date)
         values(
         #{title}, #{tag}, #{content}
         <if test="status != null">
             ,#{status}
         </if>
-        <if test="programaId != null">
-            , #{programaId}
-        </if>
+        , #{programaId}
         ,#{category}, #{source}
-        <if test="reateBy != null">
-            ,#{reateBy}
-        </if>
+        ,#{reateBy}
         ,#{createName}, now(), now()
         )
     </insert>

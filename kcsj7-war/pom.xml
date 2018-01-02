@@ -20,6 +20,13 @@
             <artifactId>kcsj7-view-front-web</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.kcsj7.view.filter1</groupId>-->
+            <!--<artifactId>kcsj7-view-front-filter1</artifactId>-->
+            <!--<version>1.0.0</version>-->
+        <!--</dependency>-->
+
     </dependencies>
     <build>
         <finalName>kcsj</finalName>

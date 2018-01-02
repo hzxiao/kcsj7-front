@@ -13,6 +13,7 @@
         <module>kcsj7-service</module>
         <module>kcsj7-common</module>
         <module>kcsj7-dao</module>
+        <module>kcsj7-filter</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -214,7 +215,17 @@
             <version>2.4</version>
         </dependency>
 
+        <!--interceptor-->
+        <!--<dependency>-->
+            <!--<groupId>org.ebaysf.web</groupId>-->
+            <!--<artifactId>cors-interceptor</artifactId>-->
+            <!--<version>1.0.1</version>-->
+        <!--</dependency>-->
+
+
     </dependencies>
+
+
 
 
 </project>

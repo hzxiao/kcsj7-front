@@ -10,14 +10,28 @@
 
     <!-- 扫描所有的controller 但是不扫描service -->
     <!--<context:component-scan base-package="com.kcsj7.view.web" use-default-filters="true">-->
-        <!--<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
-        <!--<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>-->
+        <!--<context:include-interceptor type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+        <!--<context:include-interceptor type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>-->
     <!--</context:component-scan>-->
 
     <context:component-scan base-package="com.kcsj7.view.web"/>
 
     <!-- 默认的注解映射的支持 -->
     <mvc:annotation-driven />
+
+    <!--添加HandlerInterceptor-->
+    <context:component-scan base-package="com.kcsj7.view.filter"/>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/user/**"/>
+            <bean class="com.kcsj7.view.filter.interceptor.HeaderTokenInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/api/**"/>
+            <bean class="com.kcsj7.view.filter.interceptor.HeaderTokenInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 
     <!--通用视图解析器 -->
     <bean id="viewResolver"

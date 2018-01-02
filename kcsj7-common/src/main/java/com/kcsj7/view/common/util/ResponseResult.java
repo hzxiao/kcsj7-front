@@ -86,7 +86,7 @@ public class ResponseResult<T> {
     }
 
     public static <T> ResponseResult<T> createLoginRequireResult(T data) {
-        return new ResponseResult<T>(ResponseResult.AUTH_FAIL_CODE, "未登录", data);
+        return new ResponseResult<T>(ResponseResult.LOGIN_REQUIRE_CODE, "未登录", data);
     }
 
     public static <T> ResponseResult<T> createNotFoundResult(String msg, T data) {

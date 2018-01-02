@@ -24,6 +24,11 @@
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.kcsj7.view.filter</groupId>
+            <artifactId>kcsj7-view-front-filter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     </dependencies>
 </project>

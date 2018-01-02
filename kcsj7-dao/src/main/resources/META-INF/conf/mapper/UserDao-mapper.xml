@@ -10,6 +10,16 @@
             user_basic
         WHERE username = #{username} AND pwd = #{pwd} AND user_status = 1;
     </select>
+
+    <select id="verifyUserByUserId" parameterType="String" resultType="Map">
+        SELECT
+        user_id AS userId,
+        author,
+        username
+        FROM
+        user_basic
+        WHERE username = #{username};
+    </select>
     <select id="updateUser" parameterType="Map" flushCache="true">
         UPDATE user_basic SET
             update_date = NOW()

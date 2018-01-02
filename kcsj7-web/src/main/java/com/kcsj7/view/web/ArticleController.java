@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/api/article")
 public class ArticleController {
     private static Logger log = Logger.getLogger(UserController.class);
 
@@ -23,6 +23,19 @@ public class ArticleController {
     public ResponseResult<Map<String, Object>> add(@RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
+            if (ObjectUtils.isEmpty(request.get("title"))){
+                return ResponseResult.createFailResult("发表失败,标题不能为空",null);
+            }
+            if (ObjectUtils.isEmpty(request.get("content"))){
+                return ResponseResult.createFailResult("发表失败,内容不能为空",null);
+            }
+            if (ObjectUtils.isEmpty(request.get("tag"))){
+                return ResponseResult.createFailResult("发表失败,标签不能为空",null);
+            }
+            if (ObjectUtils.isEmpty(request.get("category"))){
+                return ResponseResult.createFailResult("发表失败,分类不能为空",null);
+            }
+
             articleService.addArticle(request);
             return ResponseResult.createSuccessResult("发表成功",null);
         }catch (Exception e){
