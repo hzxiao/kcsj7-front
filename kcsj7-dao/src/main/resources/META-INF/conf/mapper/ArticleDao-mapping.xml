@@ -10,7 +10,7 @@
         ,programa_id
         ,category
         ,source
-        ,reate_by
+        ,create_by
         ,create_name, create_date, update_date)
         values(
         #{title}, #{tag}, #{content}
@@ -19,7 +19,7 @@
         </if>
         , #{programaId}
         ,#{category}, #{source}
-        ,#{reateBy}
+        ,#{createBy}
         ,#{createName}, now(), now()
         )
     </insert>
@@ -30,7 +30,7 @@
         good_comment_count as goodCommentCount, bad_comment_count AS bsdCommentCount,
         A.update_date AS updateDate, A.create_date AS createDate, B.username AS username
         FROM (article_basic A LEFT JOIN programa P ON A.programa_id = P.programa_id)
-         LEFT JOIN user_basic B ON B.user_id = A.reate_by
+         LEFT JOIN user_basic B ON B.user_id = A.create_by
         WHERE A.article_id = #{articleId}
     </select>
 </mapper>
