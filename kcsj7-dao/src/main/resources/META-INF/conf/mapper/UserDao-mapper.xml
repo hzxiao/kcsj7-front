@@ -35,7 +35,7 @@
         <if test="bisStatus != null">
             ,bis_status = #{bisStatus}
         </if>
-        <if test="email != null">
+        <if test="email != null and email != ''">
             ,email = #{email}
         </if>
         <if test="role != null">
@@ -67,14 +67,37 @@
     </insert>
 
     <select id="selectUserByUsername" parameterType="String" resultType="Map">
-        SELECT B.user_id AS userId, username, author, email, role, user_status As userStatus, E.points,
+        SELECT B.user_id AS userId, B.username, B.author, B.email, B.role, B.user_status As userStatus, E.points,
           E.signature, B.update_date As updateDate, B.create_date As createDate
-          FROM user_basic B LEFT JOIN user_extend E ON B.user_id = E.user_id WHERE username = #{username}
+          FROM user_basic B
+          LEFT JOIN user_extend E ON B.user_id = E.user_id WHERE B.username = #{username}
     </select>
 
     <select id="selectUserByUid" parameterType="Integer" resultType="Map">
-        SELECT B.user_id AS userId, username, author, email, role, user_status As userStatus, E.points,
+        SELECT B.user_id AS userId, B.username, B.author, B.email, B.role, B.user_status As userStatus, E.points,
           E.signature, B.update_date As updateDate, B.create_date As createDate
-          FROM user_basic B LEFT JOIN user_extend E ON B.user_id = E.user_id WHERE B.user_id = #{userId}
+          FROM user_basic B
+          LEFT JOIN user_extend E ON B.user_id = E.user_id WHERE  B.user_id = #{userId}
     </select>
+
+
+    <insert id="addExtendUserByUid" parameterType="Integer" flushCache="true">
+        INSERT INTO user_extend (
+        user_id,create_date, update_date)
+        values(
+        #{userId}, now(), now()
+        )
+    </insert>
+
+    <insert id="updateExtendUser" parameterType="Map" flushCache="true">
+        UPDATE user_extend SET
+        update_date = NOW()
+        <if test="signature != null and signature != ''">
+            ,signature = #{signature}
+        </if>
+        <if test="points != null">
+            ,points = #{points}
+        </if>
+        WHERE user_id = #{userId}
+    </insert>
 </mapper>

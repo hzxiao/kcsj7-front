@@ -13,4 +13,9 @@ public interface UserDao {
     void addUser(Map<String, Object> data);
     Map<String,Object> selectUserByUsername(String username);
     Map<String,Object> selectUserByUid(Integer userId);
+
+    void addExtendUserByUid(Integer userId);
+    void updateExtendUser(Map<String,Object> data);
+
+
 }

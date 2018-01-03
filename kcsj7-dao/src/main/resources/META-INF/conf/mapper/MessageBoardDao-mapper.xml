@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcsj7.view.dao.mapper.MessageBoardDao">
+    <insert id="addMessageBoard" parameterType="Map" useGeneratedKeys="true" keyProperty="messageId" keyColumn="messageId"  flushCache="true">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="messageId">
+            SELECT LAST_INSERT_ID() as messageId
+        </selectKey>
+        INSERT INTO message_board (
+        user_id, title, content
+        <if test="status != null">
+            ,status
+        </if>
+        <if test="messageOrder != null">
+            ,message_order
+        </if>
+        ,create_by
+        ,create_name, create_date, update_date)
+        values(
+        #{userId},#{title}, #{content}
+        <if test="status != null">
+            ,#{status}
+        </if>
+        <if test="messageOrder != null">
+            ,#{messageOrder}
+        </if>
+        ,#{createBy}
+        ,#{createName}, now(), now()
+        )
+    </insert>
+
+    <update id="updateMessageBoard" parameterType="Map"  flushCache="true">
+        <selectKey keyProperty='message_id' resultType='Integer' order='BEFORE'>
+            SELECT
+            (select message_id FROM message_board WHERE
+            message_id = #{messageId})message_id
+            from DUAL
+        </selectKey>
+        UPDATE message_board
+        SET update_date = NOW()
+        <if test="title != null and title != ''">
+            ,title = #{title}
+        </if>
+        <if test="content != null and content != ''">
+            ,content = #{content}
+        </if>
+        <if test="status != null">
+            ,status = #{status}
+        </if>
+        WHERE message_id = #{messageId}
+    </update>
+
+    <select id="selectMessageBoardById" parameterType="Integer" resultType="Map">
+        SELECT
+        message_id AS messageId,
+        user_id AS userId,
+        title,
+        content,
+        status,
+        message_order AS messageOrder,
+        create_by AS createBy,
+        create_name AS createName,
+        create_date AS createDate,
+        update_date AS updateDate
+        FROM message_board
+        WHERE message_id = #{messageId}
+    </select>
+
+    <select id="listMessageBoards" parameterType="Map" resultType="Map">
+        SELECT
+        message_id AS messageId,
+        user_id AS userId,
+        title,
+        content,
+        status,
+        message_order AS messageOrder,
+        create_by AS createBy,
+        create_name AS createName,
+        create_date AS createDate,
+        update_date AS updateDate
+        FROM message_board
+        WHERE 1=1
+        <if test="toUserId != null">
+            AND user_id = #{toUserId}
+        </if>
+        <if test="userId != null">
+            AND create_by = #{userId}
+        </if>
+        <if test="title != null and title!=''">
+            AND title regexp #{title}
+        </if>
+        <if test="content != null and content!=''">
+            AND content regexp #{content}
+        </if>
+
+        ORDER BY create_date
+    </select>
+
+</mapper>

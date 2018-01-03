@@ -122,7 +122,7 @@ public class ArticleController {
 
     @RequestMapping(value = "/listArticles", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult<Map<String, Object>> listChild(@RequestBody Map<String,Object> request) {
+    public ResponseResult<Map<String, Object>> listArticles(@RequestBody Map<String,Object> request) {
         Map<String,Object> result = new HashMap<String,Object>();
         try {
 

@@ -49,9 +49,12 @@ public class UserServiceImpl implements UserService {
         if (user==null){
            return null;
         }
-        String token = JwtUtil.generToken(data.get("userId").toString(),null,data.get("username").toString());
+        String token = JwtUtil.generToken(user.get("userId").toString(),null,user.get("username").toString());
         user.put("token",token);
         result.put("user",user);
+
+        // 添加拓展信息
+        userDao.addExtendUserByUid((Integer)user.get("userId"));
         return result;
     }
 
@@ -64,4 +67,37 @@ public class UserServiceImpl implements UserService {
     public Map<String, Object> getUserByUid(Integer userId) {
         return userDao.selectUserByUid(userId);
     }
+
+    @Override
+    public Map<String, Object> updateUser(Map<String, Object> data) {
+        Map<String,Object> result = new HashMap<>();
+        userDao.updateUser(data);
+        Map<String,Object> user = getUserByUid((Integer) data.get("userId"));
+        if (user==null){
+            return null;
+        }
+        if (!ObjectUtils.isEmpty(data.get("pwd"))&&!ObjectUtils.isEmpty(data.get("token"))){
+            String token = JwtUtil.updateToken(data.get("token").toString());
+            user.put("token",token);
+        }
+
+        result.put("user",user);
+
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> updateExtendUser(Map<String, Object> data) {
+        Map<String,Object> result = new HashMap<>();
+        userDao.updateExtendUser(data);
+        Map<String,Object> user = getUserByUid((Integer) data.get("userId"));
+        if (ObjectUtils.isEmpty(user)){
+            return null;
+        }
+        result.put("user",user);
+
+        return result;
+    }
+
+
 }

@@ -107,4 +107,59 @@ public class UserController  {
             return ResponseResult.createFailResult(e.getMessage(),null);
         }
     }
+
+    @RequestMapping(value = "/api/user/updateUser", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult<Map<String, Object>> updateUser(@RequestHeader Map<String ,Object> header,@RequestBody Map<String,Object> request) {
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            if (!ObjectUtils.isEmpty(request.get("pwd"))){
+                request.put("token",header.get("token"));
+            }
+
+            if (ObjectUtils.isEmpty(request.get("userId"))) {
+                return ResponseResult.createNotFoundResult("需要指定修改的用户", null);
+            }
+            Map<String,Object> data = userService.getUserByUid((Integer)request.get("userId"));
+            if (ObjectUtils.isEmpty(data)) {
+                return ResponseResult.createNotFoundResult("用户不存在", null);
+            }
+            Map<String,Object> user = userService.updateUser(request);
+            if (ObjectUtils.isEmpty(user)){
+                return ResponseResult.createFailResult("修改失败", null);
+            }
+            result.put("user", user);
+
+            return ResponseResult.createSuccessResult("success", result);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return ResponseResult.createFailResult(e.getMessage(),null);
+        }
+    }
+
+    @RequestMapping(value = "/api/user/updateExtendUser", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult<Map<String, Object>> updateExtendUser(@RequestBody Map<String,Object> request) {
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+
+            if (ObjectUtils.isEmpty(request.get("userId"))) {
+                return ResponseResult.createNotFoundResult("需要指定修改的用户", null);
+            }
+            Map<String,Object> data = userService.getUserByUid((Integer)request.get("userId"));
+            if (ObjectUtils.isEmpty(data)) {
+                return ResponseResult.createNotFoundResult("用户不存在", null);
+            }
+
+            Map<String,Object> user = userService.updateExtendUser(request);
+            if (ObjectUtils.isEmpty(user)){
+                return ResponseResult.createFailResult("修改失败", null);
+            }
+            result.put("user", user);
+            return ResponseResult.createSuccessResult("success", result);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return ResponseResult.createFailResult(e.getMessage(),null);
+        }
+    }
 }

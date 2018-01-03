@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcsj7.view.dao.mapper.CommentArticleDao">
+    <insert id="addCommentArticle" parameterType="Map" useGeneratedKeys="true" keyProperty="commentId" keyColumn="commentId"  flushCache="true">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+            SELECT LAST_INSERT_ID() as commentId
+        </selectKey>
+
+        INSERT INTO comment_article (
+        article_id,  content
+        <if test="commentMark != null and commentMark != ''">
+            ,comment_mark
+        </if>
+        <if test="status != null">
+            ,status
+        </if>
+        <if test="commentOrder != null">
+            ,comment_order
+        </if>
+        ,create_by
+        ,create_name, create_date, update_date)
+        values(
+        #{articleId}, #{content}
+        <if test="commentMark != null and commentMark != ''">
+            ,#{commentMark}
+        </if>
+        <if test="status != null">
+            ,#{status}
+        </if>
+        <if test="commentOrder != null">
+            ,#{commentOrder}
+        </if>
+        ,#{createBy}
+        ,#{createName}, now(), now()
+        )
+    </insert>
+
+    <update id="updateCommentArticle" parameterType="Map"  flushCache="true">
+        <selectKey keyProperty='comment_id' resultType='Integer' order='BEFORE'>
+            SELECT
+            (select comment_id FROM comment_article WHERE
+            comment_id = #{commentId})comment_id
+            from DUAL
+        </selectKey>
+        UPDATE comment_article
+        SET update_date = NOW()
+        <if test="content != null and content != ''">
+            ,content = #{content}
+        </if>
+        <if test="commentMark != null and commentMark != ''">
+            ,comment_mark = #{commentMark}
+        </if>
+        <if test="status != null">
+            ,status = #{status}
+        </if>
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <select id="selectCommentArticleById" parameterType="Integer" resultType="Map">
+        SELECT
+         comment_id AS commentId,
+         article_id AS articleId,
+         content,
+         comment_mark AS commentMark,
+         status,
+         comment_order AS commentOrder,
+         create_by AS createBy,
+         create_name AS createName,
+         create_date AS createDate,
+         update_date AS updateDate
+         FROM comment_article
+        WHERE comment_id = #{commentId}
+    </select>
+
+    <select id="listCommentArticles" parameterType="Map" resultType="Map">
+        SELECT
+        comment_id AS commentId,
+        article_id AS articleId,
+        content,
+        comment_mark AS commentMark,
+        status,
+        comment_order AS commentOrder,
+        create_by AS createBy,
+        create_name AS createName,
+        create_date AS createDate,
+        update_date AS updateDate
+        FROM comment_article
+        WHERE 1=1
+        <if test="articleId != null">
+            AND article_id = #{articleId}
+        </if>
+        <if test="userId != null">
+            AND create_by = #{userId}
+        </if>
+        <if test="content != null and content!=''">
+            AND content regexp #{content}
+        </if>
+        <if test="commentMark != null and commentMark != ''">
+            AND comment_mark = #{commentMark}
+        </if>
+        ORDER BY create_date
+    </select>
+
+</mapper>
