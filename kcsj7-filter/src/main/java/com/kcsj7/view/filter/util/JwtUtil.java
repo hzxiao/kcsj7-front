@@ -18,14 +18,14 @@ import java.util.function.Function;
 public class JwtUtil {
     private static final String CLAIM_KEY_USER_ID = "user_id";
     private static String sercetKey="mySecret";
-    private final static long  keeptime=604800;
+    private final static long  keeptime=6048000;
 
 //    @Value("${jwt.secret}")
 //    public  static String sercetKey;
 //    @Value("${jwt.expiration}")
 //    public static long keeptime;
 
-    public static String generToken(String username, String issuer, String subject){
+    public static String generToken(String userId, String issuer, String subject){
         long ttlMillis=keeptime;
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         long nowMillis = System.currentTimeMillis();
@@ -33,10 +33,10 @@ public class JwtUtil {
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(sercetKey);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
-        JwtBuilder builder = Jwts.builder().setId(username)
+        JwtBuilder builder = Jwts.builder().setId(userId)
                 .setIssuedAt(now);
-        if(username!=null){
-            builder.setSubject(username);
+        if(subject!=null){
+            builder.setSubject(subject);
         }
         if(issuer!=null){
             builder.setIssuer(issuer);
@@ -51,6 +51,19 @@ public class JwtUtil {
         return builder.compact();
     }
 
+    public String getUserIdFromToken(String token) {
+        String userId;
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            if (claims == null)
+                return null;
+            userId = claims.getId();
+        } catch (Exception e) {
+            userId = null;
+            return userId;
+        }
+        return userId;
+    }
 
     public String getUsernameFromToken(String token) {
         String username;

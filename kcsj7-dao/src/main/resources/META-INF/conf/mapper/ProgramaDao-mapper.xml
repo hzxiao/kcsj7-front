@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcsj7.view.dao.mapper.ProgramaDao">
+    <insert id="addPrograma" parameterType="Map" flushCache="true">
+        INSERT INTO programa (
+        programa_name
+        <if test="parentId != null">
+            ,parent_id
+        </if>
+        <if test="programaPath != null and programaPath != ''">
+            ,programa_path
+        </if>
+        <if test="status != null">
+            ,status
+        </if>
+        ,create_date, update_date)
+        values(
+        #{programaName}
+        <if test="parentId != null">
+            ,#{parentId}
+        </if>
+        <if test="programaPath != null and programaPath != ''">
+            ,programa_path
+        </if>
+        <if test="status != null">
+            ,#{status}
+        </if>
+        ,now(), now()
+        )
+    </insert>
+
+    <insert id="updatePrograma" parameterType="Map" flushCache="true">
+        UPDATE programa SET
+        update_date = NOW()
+        <if test="programaName != null and programaName != ''">
+            ,programa_name = #{programaName}
+        </if>
+        <if test="parentId != null">
+            ,parent_id = #{parentId}
+        </if>
+        <if test="programaPath != null and programaPath != ''">
+            ,programa_path = #{programaPath}
+        </if>
+        <if test="status != null">
+            ,status = #{status}
+        </if>
+        WHERE programa_id = #{programaId}
+    </insert>
+
+    <select id="selectProgramaById" parameterType="Integer" resultType="Map">
+        SELECT
+        programa_id AS programaId,
+        programa_name AS programaName,
+        parent_id AS parentId,
+        programa_path AS programaPath,
+        status
+        FROM programa WHERE programa_id = #{programaId}
+    </select>
+
+    <select id="selectProgramaByName" parameterType="String" resultType="Map">
+        SELECT
+        programa_id AS programaId,
+        programa_name AS programaName,
+        parent_id AS parentId,
+        programa_path AS programaPath,
+        status
+        FROM programa WHERE programa_name = #{programaName}
+    </select>
+
+    <select id="listProgramaByParentId" parameterType="Integer" resultType="Map">
+        SELECT
+        programa_id AS programaId,
+        programa_name AS programaName,
+        parent_id AS parentId,
+        programa_path AS programaPath,
+        status
+        FROM programa WHERE parent_id = #{parentId}
+    </select>
+</mapper>

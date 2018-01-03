@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcsj7.view.dao.mapper.ArticleDao">
+    <insert id="addArticle" parameterType="Map" flushCache="true">
+        INSERT INTO article_basic (
+        title, tag, content
+        <if test="status != null">
+          ,status
+        </if>
+        ,programa_id
+        ,category
+        <if test="source != null and source!=''">
+            ,source
+        </if>
+        ,create_by
+        ,create_name, create_date, update_date)
+        values(
+        #{title}, #{tag}, #{content}
+        <if test="status != null">
+            ,#{status}
+        </if>
+        , #{programaId}
+        ,#{category}
+        <if test="source != null and source!=''">
+            , #{source}
+        </if>
+        ,#{createBy}
+        ,#{createName}, now(), now()
+        )
+    </insert>
+
+    <update id="updateArticle" parameterType="Map" flushCache="true">
+        UPDATE article_basic
+        SET update_date = NOW()
+        <if test="title != null and title != ''">
+            ,title = #{title}
+        </if>
+        <if test="tag != null and tag != ''">
+            ,tag = #{tag}
+        </if>
+        <if test="content != null and content != ''">
+            ,content = #{content}
+        </if>
+        <if test="status != null">
+            ,status = #{status}
+        </if>
+        <if test="programaId != null">
+            ,programa_id = #{programaId}
+        </if>
+        <if test="category != null">
+            ,category = #{category}
+        </if>
+        <if test="source != null and source != ''">
+            ,source = #{source}
+        </if>
+        <if test="viewCount != null">
+            ,view_count = #{viewCount}
+        </if>
+        <if test="goodCommentCount != null">
+            ,good_comment_count = #{goodCommentCount}
+        </if>
+        <if test="badCommentCount != null">
+            ,bad_comment_count = #{badCommentCount}
+        </if>
+        WHERE article_id = #{articleId}
+    </update>
+
+    <select id="selectArticleById" parameterType="Integer" resultType="Map">
+        SELECT A.article_id AS articleId, A.title, A.tag, A.content, A.status, A.source, A.category,
+        A.view_count AS viewCount, A.programa_id AS programaId ,P.programa_name AS programaName,
+        A.comment_count AS commentCount,
+        A.good_comment_count as goodCommentCount, A.bad_comment_count AS bsdCommentCount,
+        A.update_date AS updateDate, A.create_date AS createDate, A.create_name AS createName,
+        A.create_by AS createBy
+        FROM article_basic A LEFT JOIN programa P ON A.programa_id = P.programa_id
+        WHERE A.article_id = #{articleId}
+    </select>
+
+    <select id="selectArticleByTitle" parameterType="String" resultType="Map">
+       SELECT A.article_id AS articleId, A.title, A.tag, A.content, A.status, A.source, A.category,
+        A.view_count AS viewCount, A.programa_id AS programaId ,P.programa_name AS programaName,
+        A.comment_count AS commentCount,
+        A.good_comment_count as goodCommentCount, A.bad_comment_count AS bsdCommentCount,
+        A.update_date AS updateDate, A.create_date AS createDate, A.create_name AS createName,
+        A.create_by AS createBy
+        FROM article_basic A LEFT JOIN programa P ON A.programa_id = P.programa_id
+        WHERE A.title = #{title}
+    </select>
+
+
+    <select id="listArticles" parameterType="Map" resultType="Map">
+        SELECT A.article_id AS articleId, A.title, A.tag, A.content, A.status, A.source, A.category,
+        A.view_count AS viewCount, A.programa_id AS programaId ,P.programa_name AS programaName,
+        A.comment_count AS commentCount,
+        A.good_comment_count as goodCommentCount, A.bad_comment_count AS badCommentCount,
+        A.update_date AS updateDate, A.create_date AS createDate, A.create_name AS createName,
+        A.create_by AS createBy
+        FROM article_basic A LEFT JOIN programa P ON A.programa_id = P.programa_id
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND A.title regexp #{title}
+        </if>
+
+        <if test="programaIds != null">
+            <trim prefix="and(" suffix=")">
+                <foreach collection="programaIds" index="index" item="programaId" separator="OR">
+                    A.programa_id REGEXP #{programaId}
+                </foreach>
+            </trim>
+        </if>
+
+        <if test="tag != null and tag!=''">
+            AND A.tag regexp #{tag}
+        </if>
+        <if test="source != null and source!=''">
+            AND A.source regexp #{source}
+        </if>
+
+        <if test="category != null">
+            AND A.category = #{category}
+        </if>
+
+        <if test="userId != null">
+            AND A.create_by = #{userId}
+        </if>
+
+    </select>
+
+</mapper>
