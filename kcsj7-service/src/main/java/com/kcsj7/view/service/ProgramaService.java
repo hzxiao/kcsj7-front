@@ -12,6 +12,8 @@ public interface ProgramaService {
     Map<String, Object> selectProgramaById(Integer data);
     Map<String, Object> selectProgramaByName(String data);
     List<Map<String, Object>> listProgramaByParentId(Integer data);
+    List<Map<String, Object>> listProgramas(Map<String, Object> data);
+    Map<String, Object> listArticles(Map<String, Object> data);
 
 
 }

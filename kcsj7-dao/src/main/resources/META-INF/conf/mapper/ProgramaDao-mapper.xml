@@ -20,7 +20,7 @@
             ,#{parentId}
         </if>
         <if test="programaPath != null and programaPath != ''">
-            ,programa_path
+            ,#{programaPath}
         </if>
         <if test="status != null">
             ,#{status}
@@ -74,6 +74,38 @@
         parent_id AS parentId,
         programa_path AS programaPath,
         status
-        FROM programa WHERE parent_id = #{parentId}
+        FROM programa WHERE parent_id = #{parentId} OR programa_id = #{parentId}
+    </select>
+
+    <select id="listProgramaParent" resultType="Map">
+        SELECT
+        programa_id AS programaId,
+        programa_name AS programaName,
+        parent_id AS parentId,
+        programa_path AS programaPath,
+        status
+        FROM programa WHERE parent_id IS NULL;
+    </select>
+
+    <select id="listProgramas" parameterType="Map"  resultType="Map">
+        SELECT
+        programa_id AS programaId,
+        programa_name AS programaName,
+        parent_id AS parentId,
+        programa_path AS programaPath,
+        status
+        FROM programa WHERE 1=1
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        <if test="programaId != null">
+            AND programa_id = #{programaId}
+        </if>
+        <if test="programaName != null and programaName != ''">
+            AND programa_name = #{programaName}
+        </if>
+        <if test="status != null">
+            AND status regexp #{status}
+        </if>
     </select>
 </mapper>

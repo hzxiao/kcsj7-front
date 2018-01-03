@@ -9,6 +9,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,6 @@ import java.util.Map;
  * Created by tying on 2018/1/3.
  */
 @Controller
-@RequestMapping("/api/board")
 public class MessageBoardController {
     private static Logger log = Logger.getLogger(MessageBoardController.class);
 
@@ -26,12 +26,14 @@ public class MessageBoardController {
     @Resource
     private UserService userService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board/add", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult<Map<String, Object>> add(@RequestHeader Map<String ,Object> header, @RequestBody Map<String,Object> request){
-        request.put("token",header.get("token"));
+    public ResponseResult<Map<String, Object>> add(HttpServletRequest httpServletRequest, @RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
+            if (!ObjectUtils.isEmpty(httpServletRequest.getParameter("token"))){
+                request.put("token",httpServletRequest.getParameter("token"));
+            }
             if (ObjectUtils.isEmpty(request.get("userId"))){
                 return ResponseResult.createFailResult("留言失败,指定留言用户不能为空",null);
             }
@@ -64,7 +66,7 @@ public class MessageBoardController {
     }
 
 
-    @RequestMapping(value = "/{messageId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/{messageId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult<Map<String, Object>> getUserByAUserId(@PathVariable Integer messageId) {
         Map<String,Object> result = new HashMap<String,Object>();
@@ -83,7 +85,7 @@ public class MessageBoardController {
     }
 
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/board/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult<Map<String, Object>> update(@RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
@@ -110,7 +112,7 @@ public class MessageBoardController {
         }
     }
 
-    @RequestMapping(value = "/listMessages", method = RequestMethod.POST)
+    @RequestMapping(value = "/board/listMessages", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult<Map<String, Object>> listMessages(@RequestBody Map<String,Object> request) {
         Map<String,Object> result = new HashMap<String,Object>();

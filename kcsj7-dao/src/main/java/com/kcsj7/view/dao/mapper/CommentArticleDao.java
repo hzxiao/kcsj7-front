@@ -9,6 +9,6 @@ import java.util.Map;
 public interface CommentArticleDao {
     Integer addCommentArticle(Map<String, Object> data);
     Integer updateCommentArticle(Map<String, Object> data);
-    Map<String, Object> selectCommentArticleById(Integer articleId);
+    Map<String, Object> selectCommentArticleById(Integer commentId);
     List<Map<String, Object>> listCommentArticles(Map<String, Object> data);
 }

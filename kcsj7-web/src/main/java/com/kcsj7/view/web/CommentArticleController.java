@@ -9,6 +9,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,6 @@ import java.util.Map;
  * Created by tying on 2018/1/3.
  */
 @Controller
-@RequestMapping("/api/article/comment")
 public class CommentArticleController {
 
     private static Logger log = Logger.getLogger(CommentArticleController.class);
@@ -28,12 +28,14 @@ public class CommentArticleController {
     @Resource
     private ArticleService articleService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/article/comment/add", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult<Map<String, Object>> add(@RequestHeader Map<String ,Object> header, @RequestBody Map<String,Object> request){
-        request.put("token",header.get("token"));
+    public ResponseResult<Map<String, Object>> add(HttpServletRequest httpServletRequest, @RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
+            if (!ObjectUtils.isEmpty(httpServletRequest.getParameter("token"))){
+                request.put("token",httpServletRequest.getParameter("token"));
+            }
             if (ObjectUtils.isEmpty(request.get("articleId"))){
                 return ResponseResult.createFailResult("评论失败,文章不能为空",null);
             }
@@ -70,7 +72,7 @@ public class CommentArticleController {
     }
 
 
-    @RequestMapping(value = "/{commentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/article/comment/{commentId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult<Map<String, Object>> getUserByAUserId(@PathVariable Integer commentId) {
         Map<String,Object> result = new HashMap<String,Object>();
@@ -89,7 +91,7 @@ public class CommentArticleController {
     }
 
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/article/comment/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult<Map<String, Object>> update(@RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
@@ -116,7 +118,7 @@ public class CommentArticleController {
         }
     }
 
-    @RequestMapping(value = "/listComments", method = RequestMethod.POST)
+    @RequestMapping(value = "/article/comment/listComments", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult<Map<String, Object>> listComments(@RequestBody Map<String,Object> request) {
         Map<String,Object> result = new HashMap<String,Object>();

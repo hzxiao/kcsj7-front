@@ -9,6 +9,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,11 +111,11 @@ public class UserController  {
 
     @RequestMapping(value = "/api/user/updateUser", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult<Map<String, Object>> updateUser(@RequestHeader Map<String ,Object> header,@RequestBody Map<String,Object> request) {
+    public ResponseResult<Map<String, Object>> updateUser(HttpServletRequest httpServletRequest,@RequestBody Map<String, Object> request) {
         Map<String,Object> result = new HashMap<String,Object>();
         try {
-            if (!ObjectUtils.isEmpty(request.get("pwd"))){
-                request.put("token",header.get("token"));
+            if (!ObjectUtils.isEmpty(httpServletRequest.getParameter("token"))){
+                request.put("token",httpServletRequest.getParameter("token"));
             }
 
             if (ObjectUtils.isEmpty(request.get("userId"))) {

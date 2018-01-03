@@ -12,4 +12,6 @@ public interface ProgramaDao {
     Map<String, Object> selectProgramaById(Integer programaId);
     Map<String, Object> selectProgramaByName(String programaName);
     List<Map<String,Object>> listProgramaByParentId(Integer parentId);
+    List<Map<String,Object>> listProgramaParent();
+    List<Map<String,Object>> listProgramas(Map<String, Object> data);
 }

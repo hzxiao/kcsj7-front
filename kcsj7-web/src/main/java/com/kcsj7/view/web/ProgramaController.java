@@ -15,14 +15,13 @@ import java.util.Map;
  * Created by tying on 2018/1/2.
  */
 @RestController
-@RequestMapping("/api/programa")
 public class ProgramaController {
     private static Logger log = Logger.getLogger(ProgramaController.class);
 
     @Resource
     ProgramaService programaService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/programa/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult<Map<String, Object>> add(@RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
@@ -54,7 +53,7 @@ public class ProgramaController {
         }
     }
 
-    @RequestMapping(value = "/{programaId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/programa/{programaId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult<Map<String, Object>> getUserByAUserId(@PathVariable Integer programaId) {
         Map<String,Object> result = new HashMap<String,Object>();
@@ -71,7 +70,7 @@ public class ProgramaController {
         }
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/programa/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult<Map<String, Object>> update(@RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
@@ -105,7 +104,7 @@ public class ProgramaController {
         }
     }
 
-    @RequestMapping(value = "/listChild/{parentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/programa/listChild/{parentId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult<Map<String, Object>> listChild(@PathVariable Integer parentId) {
         Map<String,Object> result = new HashMap<String,Object>();
@@ -116,6 +115,33 @@ public class ProgramaController {
             }
             List<Map<String,Object>> programaList = programaService.listProgramaByParentId(parentId);
             result.put("programaList", programaList);
+            return ResponseResult.createSuccessResult("success", result);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return ResponseResult.createFailResult(e.getMessage(),null);
+        }
+    }
+    @RequestMapping(value = "/programa/listProgramas", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult<Map<String, Object>> listChild(@RequestBody Map<String,Object> request) {
+        Map<String,Object> result = new HashMap<String,Object>();
+        try {
+            List<Map<String,Object>> programaList = programaService.listProgramas(request);
+            result.put("programaList", programaList);
+            return ResponseResult.createSuccessResult("success", result);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return ResponseResult.createFailResult(e.getMessage(),null);
+        }
+    }
+
+    @RequestMapping(value = "/programa/listArticles", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult<Map<String, Object>> listArticles(@RequestBody Map<String,Object> request) {
+
+        try {
+
+            Map<String,Object> result = programaService.listArticles(request);
             return ResponseResult.createSuccessResult("success", result);
         }catch (Exception e){
             log.error(e.getMessage(), e);

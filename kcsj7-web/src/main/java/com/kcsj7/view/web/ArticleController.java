@@ -8,13 +8,13 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/article")
 public class ArticleController {
     private static Logger log = Logger.getLogger(ArticleController.class);
 
@@ -24,12 +24,14 @@ public class ArticleController {
     @Resource
     ProgramaService programaService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/article/add", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult<Map<String, Object>> add(@RequestHeader Map<String ,Object> header,@RequestBody Map<String,Object> request){
-        request.put("token",header.get("token"));
+    public ResponseResult<Map<String, Object>> add(HttpServletRequest httpServletRequest, @RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
+            if (!ObjectUtils.isEmpty(httpServletRequest.getParameter("token"))){
+                request.put("token",httpServletRequest.getParameter("token"));
+            }
             if (ObjectUtils.isEmpty(request.get("title"))){
                 return ResponseResult.createFailResult("发表失败,标题不能为空",null);
             }
@@ -66,7 +68,7 @@ public class ArticleController {
     }
 
 
-    @RequestMapping(value = "/{articleId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult<Map<String, Object>> getUserByAUserId(@PathVariable Integer articleId) {
         Map<String,Object> result = new HashMap<String,Object>();
@@ -85,7 +87,7 @@ public class ArticleController {
     }
 
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/article/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult<Map<String, Object>> update(@RequestBody Map<String,Object> request){
         Map<String,Object> result = new HashMap<String,Object>();
@@ -120,7 +122,7 @@ public class ArticleController {
         }
     }
 
-    @RequestMapping(value = "/listArticles", method = RequestMethod.POST)
+    @RequestMapping(value = "/article/listArticles", method = RequestMethod.POST)
     @ResponseBody
     public ResponseResult<Map<String, Object>> listArticles(@RequestBody Map<String,Object> request) {
         Map<String,Object> result = new HashMap<String,Object>();

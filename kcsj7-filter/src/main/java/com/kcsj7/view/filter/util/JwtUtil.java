@@ -108,7 +108,7 @@ public class JwtUtil {
 //                .getBody();
 //    }
 
-    public String updateToken(String token){
+    public static String updateToken(String token){
         try {
             Claims claims=verifyToken(token);
             String username=claims.getId();
